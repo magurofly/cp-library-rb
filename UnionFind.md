@@ -12,7 +12,7 @@ end
 
 ## 連結成分を保持する
 
-- `merge(i, j)`: O(log N)
+- `merge(i, j)`: O(N log N)
 
 ```ruby
 uf = UnionFind.new(3)
@@ -33,7 +33,7 @@ end
 
 ## 可換半群が載る
 
-- `merge(i, j) { |x, y| ... }`: O(log N)
+- `merge(i, j) { |x, y| ... }`: O(N log N)
   - `x` に `y` を合成するとマージテクができる
 
 ```ruby

@@ -52,3 +52,19 @@ class UnionFind
   def [](i); @x[leader(i)]; end
 end
 ```
+
+
+## Undo できる
+
+未Verify
+
+```ruby
+class UndoableUnionFind
+  def initialize(size); @p, @r, @h = [*0...size], [1] * size, []; end
+  def leader(i); j = i; until i == @p[i]; j, i = i, @p[j] = @p[i]; end; i; end
+  def merge(i, j); k, l = leader(i), leader(j); return false if k == l; @h << [k, l, @r[k], @r[l]]; k, l = l, k if @r[k] < @r[l]; @p[l] = k; @r[k] += @r[l]; true; end
+  def undo; return if @h.empty?; k, l, s, t = @h.pop; @p[k], @p[l], @r[k], @r[l] = k, l, s, t; end
+  def same?(i, j); leader(i) == leader(j); end
+  def size(i); @r[leader(i)]; end
+end
+```

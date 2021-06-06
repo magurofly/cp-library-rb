@@ -2,11 +2,11 @@
 
 ```ruby
 class UnionFind
-  def initialize(size); @p, @r = [*0...size], [1] * size; end
-  def leader(i); j = i; until i == @p[i]; j, i = i, @p[j] = @p[i]; end; i; end
-  def merge(i, j); k, l = leader(i), leader(j); return false if k == l; k, l = l, k if @r[k] < @r[l]; @p[l] = k; @r[k] += @r[l]; true; end
+  def initialize(size); @p = Array.new(size, -1); end
+  def leader(i); j = i; j, i = i, @p[j] = @p[i] until @p[i] < 0; i; end
+  def merge(i, j); k, l = leader(i), leader(j); return false if k == l; k, l = l, k if @p[k] > @p[l]; @p[k] += @p[l]; @p[l] = k; true; end
   def same?(i, j); leader(i) == leader(j); end
-  def size(i); @r[leader(i)]; end
+  def size(i); -@p[leader(i)]; end
 end
 ```
 

@@ -68,3 +68,59 @@ class UndoableUnionFind
   def size(i); @r[leader(i)]; end
 end
 ```
+
+## ポテンシャル付き
+
+ポテンシャルは可換群である必要がある。
+
+```ruby
+class PotentializedUnionFind
+ 	# Verify: https://onlinejudge.u-aizu.ac.jp/solutions/problem/DSL_1_B/review/6018983/magurofly/Ruby
+     attr_reader :potential
+ 
+     # 初期化
+     def initialize(n)
+         @components = Array.new(n) { |i| [i] }
+         @potential = Array.new(n, 0)
+     end
+     
+     # 連結成分を取得
+     def [](i)
+         @components[i]
+     end
+ 
+     # ポテンシャルの差を取得
+     def diff(i, j)
+         x, y = @components[i], @components[j]
+         return nil if x != y
+         @potential[j] - @potential[i]
+     end
+     
+     # ポテンシャルを指定して連結
+     # @potential[i] + d = @potential[j]
+     def merge(i, j, d)
+         x, y = @components[i], @components[j]
+         if x == y
+             raise "potential contradiction" if @potential[i] + d != @potential[j]
+             return false
+         end
+         if x.size >= y.size
+             diff = @potential[i] - @potential[j] + d
+             y.each do |k|
+                 @components[k] = x
+                 x << k
+                 @potential[k] += diff
+             end
+         else
+             diff = @potential[j] - @potential[i] - d
+             x.reverse_each do |k|
+                 @components[k] = y
+                 # y.unshift k
+                 y << k
+                 @potential[k] += diff
+             end
+         end
+         true
+     end
+ end
+ ```

@@ -7,6 +7,7 @@ class UnionFind
   def merge(i, j); k, l = leader(i), leader(j); return false if k == l; k, l = l, k if @p[k] > @p[l]; @p[k] += @p[l]; @p[l] = k; true; end
   def same?(i, j); leader(i) == leader(j); end
   def size(i); -@p[leader(i)]; end
+  def groups; g = {}; @p.size.times { |i| (g[leader(i)] ||= []) << i }; g.values; end
 end
 ```
 
